@@ -15,10 +15,14 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-
+Route::get('ping', function() {
+    return response()->json([
+        'message' => 'pong',
+    ]);
+});
 
 Route::prefix('v1')->namespace('Api')->group(function () {
-    
+
     Route::post('/login', [LoginJwtController::class, 'login'])->name('login');
     Route::get('/logout', [LoginJwtController::class, 'logout'])->name('logout');
     Route::get('/refresh', [LoginJwtController::class, 'refresh'])->name('refresh');
@@ -32,8 +36,8 @@ Route::prefix('v1')->namespace('Api')->group(function () {
 
     Route::prefix('real-states')->name('real_states.')->group(function(){
 
-        Route::get('/', [RealStateController::class, 'index'])->middleware('jwt.auth')->name('index'); 
-        Route::get('/{id}', [RealStateController::class, 'show'])->middleware('jwt.auth')->name('show'); 
+        Route::get('/', [RealStateController::class, 'index'])->middleware('jwt.auth')->name('index');
+        Route::get('/{id}', [RealStateController::class, 'show'])->middleware('jwt.auth')->name('show');
         Route::post('/',[RealStateController::class, 'store'])->middleware('jwt.auth')->name('store');
         Route::put('/{id}',[RealStateController::class, 'update'])->middleware('jwt.auth')->name('update');
         Route::patch('/{id}',[RealStateController::class, 'update'])->middleware('jwt.auth')->name('update');
@@ -64,7 +68,7 @@ Route::prefix('v1')->namespace('Api')->group(function () {
 
     Route::prefix('photos')->name('photos.')->group(function() {
         Route::delete('/{id}', [RealStatePhotoController::class, 'remove'])->name('remove');
-        
+
         Route::put('/set-thumb/{photoId}/{realStateId}', [RealStatePhotoController::class, 'setThumb'])->name('setThumb');
     });
 
